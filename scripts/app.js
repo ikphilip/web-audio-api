@@ -6,10 +6,16 @@ var audioCtx = new AudioContext();
 var oscillator = audioCtx.createOscillator();
 var gainNode = audioCtx.createGain();
 
-// connect oscillator to gain node to speakers
+// Create a merge node
+var merger = audioCtx.createChannelMerger(2);
+var channel = 0;
 
+// connect oscillator to a single channel
 oscillator.connect(gainNode);
-gainNode.connect(audioCtx.destination);
+gainNode.connect(merger, 0, channel);
+
+// Sent to output
+merger.connect(audioCtx.destination);
 
 // create initial theremin frequency and volumn values
 
@@ -62,17 +68,35 @@ var mute = document.querySelector('.mute');
 
 mute.onclick = function() {
   if(mute.getAttribute('data-muted') === 'false') {
-    gainNode.disconnect(audioCtx.destination);
+    merger.disconnect(audioCtx.destination);
     mute.setAttribute('data-muted', 'true');
     mute.innerHTML = "Unmute";
   } else {
-    gainNode.connect(audioCtx.destination);
+    merger.connect(audioCtx.destination);
     mute.setAttribute('data-muted', 'false');
     mute.innerHTML = "Mute";
   };
 }
 
+// switch channel where sound is output
 
+var switchChannel = document.querySelector('.switch');
+
+switchChannel.setAttribute('data-channel', channel);
+
+switchChannel.onclick = function () {
+  oldChannel = this.getAttribute('data-channel');
+  channel = oldChannel == 0 ? 1 : 0;
+  merger.disconnect(audioCtx.destination);
+  gainNode.connect(merger, 0, channel);
+  gainNode.disconnect(merger, 0, oldChannel);
+  merger.connect(audioCtx.destination);
+  this.setAttribute('data-channel', channel);
+  inner = 'Switch Channel (current = ';
+  inner += channel == 0 ? 'left)' : 'right)';
+  console.log(inner); 
+  this.innerHTML = inner;
+}
 
 // canvas visualization
 
@@ -144,6 +168,11 @@ body.onkeydown = function(e) {
 
   if(e.keyCode == 40) {
     KeyY += 20;
+  };
+
+  if (e.keyCode == 13) {
+    switchChannel.click();
+    return;
   };
 
   // set max and min constraints for KeyX and KeyY
