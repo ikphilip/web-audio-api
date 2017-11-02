@@ -1,3 +1,8 @@
+two-channel
+================
+
+This branch demonstrates how switching a single source to different channels can be achieved.
+
 violent-theremin
 ================
 
