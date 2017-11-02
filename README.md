@@ -1,3 +1,8 @@
+two-audio-sources
+================
+
+Experiments which 2 audio sources into 2 channels.
+
 violent-theremin
 ================
 
