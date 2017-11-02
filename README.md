@@ -1,3 +1,8 @@
+gh-pages
+================
+
+This the original web audio api app cloned from Mozilla's. Everything I do is built off this example.
+
 violent-theremin
 ================
 
