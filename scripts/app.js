@@ -4,12 +4,33 @@ var audioCtx = new AudioContext();
 
 // create Oscillator and gain node
 var oscillator = audioCtx.createOscillator();
+var oscillator2 = audioCtx.createOscillator();
+
 var gainNode = audioCtx.createGain();
+var gainNode2 = audioCtx.createGain();
+
+
+// Splitter
+var splitter = audioCtx.createChannelSplitter(2);
+var splitter2 = audioCtx.createChannelSplitter(2);
+
+var merger = audioCtx.createChannelMerger(2);
 
 // connect oscillator to gain node to speakers
 
 oscillator.connect(gainNode);
-gainNode.connect(audioCtx.destination);
+oscillator2.connect(gainNode2);
+
+gainNode.connect(splitter);
+gainNode2.connect(splitter2);
+// Connect right channel
+splitter.connect(merger, 0, 0)
+
+// Connect left channel
+splitter2.connect(merger, 0, 1);
+
+// Sent to output
+merger.connect(audioCtx.destination);
 
 // create initial theremin frequency and volumn values
 
@@ -19,14 +40,20 @@ var HEIGHT = window.innerHeight;
 var maxFreq = 6000;
 var maxVol = 0.02;
 
-var initialFreq = 3000;
-var initialVol = 0.001;
+var initialFreq = 400;
+var initialFreq2 = 400;
+var initialVol = 0.01;
+
+gainNode2.gain.value = initialVol;
 
 // set options for the oscillator
-
-
 oscillator.detune.value = 100; // value in cents
+oscillator.frequency.value = initialFreq;
 oscillator.start(0);
+
+oscillator2.detune.value = 100; // value in cents
+oscillator2.frequency.value = initialFreq2;
+oscillator2.start(0);
 
 oscillator.onended = function() {
   console.log('Your tone has now stopped playing!');
@@ -62,11 +89,11 @@ var mute = document.querySelector('.mute');
 
 mute.onclick = function() {
   if(mute.getAttribute('data-muted') === 'false') {
-    gainNode.disconnect(audioCtx.destination);
+    merger.disconnect(audioCtx.destination);
     mute.setAttribute('data-muted', 'true');
     mute.innerHTML = "Unmute";
   } else {
-    gainNode.connect(audioCtx.destination);
+    merger.connect(audioCtx.destination);
     mute.setAttribute('data-muted', 'false');
     mute.innerHTML = "Mute";
   };
@@ -168,4 +195,8 @@ body.onkeydown = function(e) {
   gainNode.gain.value = (KeyY/HEIGHT) * maxVol;
 
   canvasDraw();
+}
+
+function switchChannel() {
+
 }
