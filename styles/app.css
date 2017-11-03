@@ -83,3 +83,14 @@ body > p {
   top: 6px;
   left: 160px;
 }
+
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 700px;
+}
+
+.container > div {
+  max-width: 270px;
+  margin: 15px 30px;
+}
