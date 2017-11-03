@@ -1,7 +1,7 @@
-two-audio-sources
+multiple-audio-sources
 ================
 
-Experiments which 2 audio sources into 2 channels.
+Experiments which multiple (2-4) audio sources into a single output.
 
 violent-theremin
 ================
