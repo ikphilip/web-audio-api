@@ -6,11 +6,15 @@ var frontRight = document.querySelector('.front-right');
 var surroundLeft = document.querySelector('.surround-left');
 var surroundRight = document.querySelector('.surround-right');
 
-// Add controls
+// Add controls and fix Chrome CORS restriction
 frontLeft.controls = true;
+frontLeft.src = 'media/aintnoman-mono.aac';
 frontRight.controls = true;
+frontRight.src = 'media/sitting-on-top.mp3';
 surroundLeft.controls = true;
+surroundLeft.src = 'media/sitting-on-top.mp3';
 surroundRight.controls = true;
+surroundRight.src = 'media/aintnoman-mono.aac';
 
 // createMediaElementSource grabs a resource referenced in DOM
 var sourceFL = audioCtx.createMediaElementSource(frontLeft);

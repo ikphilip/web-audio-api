@@ -91,6 +91,11 @@ body > p {
 }
 
 .container > div {
-  max-width: 270px;
-  margin: 15px 30px;
+  margin: 15px 14px;
+  padding: 10px;
+  border: 1px dashed black;
+}
+
+audio {
+  width: 300px;
 }
