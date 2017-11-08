@@ -1,7 +1,9 @@
 multiple-audio-sources
 ================
 
-Experiments which multiple (2-4) audio sources into a single output.
+This branch demonstrates that the (multiple)channels of a stereo audio stream can be piped into a single channel output in the web browser.
+
+There is also a demonstration of the DOM being used to manipulate and control the output using the Web Audio API.
 
 violent-theremin
 ================
