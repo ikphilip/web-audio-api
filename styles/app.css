@@ -99,3 +99,8 @@ body > p {
 audio {
   width: 300px;
 }
+
+.info {
+  margin: 15px 14px 0 14px;
+  width: 700px;
+}

@@ -1,5 +1,13 @@
 var audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
+var isChrome = false;
+var mediaPrefix = '';
+
+if (navigator.userAgent.indexOf('Chrome') !== -1) {
+  isChrome = true;
+  mediaPrefix = 'https://raw.githubusercontent.com/ikphilip/web-audio-api/multiple-audio-sources/';
+}
+
 // Collect the distinct audio sources
 var frontLeft = document.querySelector('.front-left');
 var frontRight = document.querySelector('.front-right');
@@ -12,21 +20,32 @@ var surroundBackRight = document.querySelector('.surround-back-right');
 
 // Add controls and fix Chrome CORS restriction
 frontLeft.controls = true;
-frontLeft.src = 'media/art-tatum.mp3';
+frontLeft.src = mediaPrefix + 'media/art-tatum.mp3';
 frontRight.controls = true;
-frontRight.src = 'media/sitting-on-top.mp3';
+frontRight.src = mediaPrefix + 'media/sitting-on-top.mp3';
 surroundLeft.controls = true;
-surroundLeft.src = 'media/sitting-on-top.mp3';
+surroundLeft.src = mediaPrefix + 'media/sitting-on-top.mp3';
 surroundRight.controls = true;
-surroundRight.src = 'media/art-tatum.mp3';
+surroundRight.src = mediaPrefix + 'media/art-tatum.mp3';
 center.controls = true;
-center.src = 'media/since-i-fell-for-you.mp3';
+center.src = mediaPrefix + 'media/since-i-fell-for-you.mp3';
 sub.controls = true;
-sub.src = 'media/of-its-own-kind.mp3';
+sub.src = mediaPrefix + 'media/of-its-own-kind.mp3';
 surroundBackLeft.controls = true;
-surroundBackLeft.src = 'media/of-its-own-kind.mp3';
+surroundBackLeft.src = mediaPrefix + 'media/of-its-own-kind.mp3';
 surroundBackRight.controls = true;
-surroundBackRight.src = 'media/since-i-fell-for-you.mp3';
+surroundBackRight.src = mediaPrefix + 'media/since-i-fell-for-you.mp3';
+
+if (isChrome) {
+  frontLeft.crossOrigin = 'anonymous';
+  frontRight.crossOrigin = 'anonymous';
+  surroundLeft.crossOrigin = 'anonymous';
+  surroundRight.crossOrigin = 'anonymous';
+  center.crossOrigin = 'anonymous';
+  sub.crossOrigin = 'anonymous';
+  surroundBackLeft.crossOrigin = 'anonymous';
+  surroundBackRight.crossOrigin = 'anonymous';
+}
 
 // createMediaElementSource grabs a resource referenced in DOM
 var sourceFL = audioCtx.createMediaElementSource(frontLeft);
@@ -79,3 +98,16 @@ gainNodeSBR.connect(merger, 0, 7);
 
 // Connect to output
 merger.connect(audioCtx.destination);
+
+// Print some debug info
+var ele0 = document.getElementById('browser');
+var ele1 = document.getElementById('max-channel-count');
+var ele2 = document.getElementById('channel-count');
+var ele3 = document.getElementById('channel-count-mode');
+var ele4 = document.getElementById('channel-interpretation');
+
+ele0.innerHTML = '<h2>Detected Browser : ' + (isChrome ? 'Chrome' : 'Not Chrome') + '</h2>';
+ele1.innerHTML = '<h2>Max Channel Count : ' + audioCtx.destination.maxChannelCount + '</h2>';
+ele2.innerHTML = '<h2>Channel Count : ' + audioCtx.destination.channelCount + '</h2>';
+ele3.innerHTML = '<h2>Channel Count Mode : ' + audioCtx.destination.channelCountMode + '</h2>';
+ele4.innerHTML = '<h2>Channel Interpretation : ' + audioCtx.destination.channelInterpretation + '</h2>';
